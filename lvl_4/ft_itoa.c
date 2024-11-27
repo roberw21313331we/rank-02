@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 int	nlen(int n)
@@ -5,10 +6,15 @@ int	nlen(int n)
 	int	c;
 	
 	c = 1;
+	if (n<0)
+	{
+		c++;
+		n = -n;
+	}
 	while (n/10)
 	{
-		n=n/10;
 		c++;
+		n = n /10;
 	}
 	return (c);
 }
@@ -16,13 +22,8 @@ int	nlen(int n)
 char	*ft_itoa(int nbr)
 {
 	char	*str;
-	long	m;
-	int		d;
+	int	len;
 
-	d = nlen(nbr);
-	str = (char *)malloc(d + 1);
-	if (!str)
-		return (NULL);
 	if (nbr == 0 || nbr == -2147483648)
 	{
 		if (nbr == 0)
@@ -30,28 +31,29 @@ char	*ft_itoa(int nbr)
 		else
 			return("-2147483648");
 	}
-	m = nbr;
-	if (nbr < 0)
-		m = -nbr;
-	str[d] = '\0';
-	if (nbr < 0)
+
+	len = nlen(nbr);
+	str = malloc (len);
+	if(!str)
+		return(NULL);
+	str[len]='\0';
+	len--;
+	if (nbr<0)
 	{
-		while (d>0)
-		{
-			str[d] = (m % 10) + 48;
-			m = m / 10;
-			d--;
-		}
+		nbr = -nbr;
+		str[0]='-';
 	}
-	else
+	while(nbr>0)
 	{
-		while (d--)
-		{
-			str[d] = (m % 10) + 48;
-			m = m / 10;
-		}
+		str[len] = nbr%10+48;
+		nbr = nbr/10;
+		len--;
 	}
-	if (nbr < 0)
-		str [0] = '-';
 	return (str);
+}
+
+int	main(void)
+{
+	printf("%s",ft_itoa(0));
+	return(0);
 }
